@@ -18,7 +18,7 @@ function setup() {
   }
   fourierX = dft(x);
   fourierX.sort((a,b) => b.amp - a.amp);
-  slider = createSlider(1,800,250);
+  slider = createSlider(1,1000,250);
   slider.input(updateValue);
   updateValue();
   slider.style('width', '40%');
@@ -31,7 +31,6 @@ function setup() {
 }
 // Fonction qui créer les épicicles à partir des valeurs données par la transformation de fourier
 function epicycles(x, y, rotation, fourier) {
-  console.log(fourier.length);
   for (let i = 0; i< slider.value() && i < fourier.length; i++) {
     let prevx = x;
     let prevy = y;
@@ -55,6 +54,10 @@ function draw() {
   background(0);
   // Utilise la fonction épicycles pour tracer les épicycles nécessaires
   let v = epicycles(width / 2, height / 2, 0, fourierX);
+  if (slider.elt.max != fourierX.length){
+    slider.elt.max = fourierX.length
+  }
+
   path.unshift(v);
   // Trace le chemin parcouru
   beginShape();
@@ -70,7 +73,7 @@ function draw() {
   if (path.length > fourierX.length * 0.95) {
       path.pop();
   }
-
+  
 }
 
 function updateValue(){
