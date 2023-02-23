@@ -9,7 +9,7 @@ class Complex {
         this.re += c.re;
         this.im += c.im;
     }
-// faire le produit de deux nommbres complexes
+// Faire le produit de deux nommbres complexes
     mult(c) {
         const re = this.re * c.re - this.im * c.im;
         const im = this.re * c.im + this.im * c.re;
@@ -19,7 +19,11 @@ class Complex {
 
 // Fonction qui effectue la transformation de Fourier 
 // Renvoie la partie réelle et imaginaire du nombre 
-// Renvoie aussi la fréquence, amplitude et phase de l'épicycle à tracer 
+// Renvoie aussi la fréquence, l'amplitude et la phase de l'épicycle à tracer 
+
+// La formule qui permet d'obtenir ces valeurs et présent dans la page wikipedia:
+// https://en.wikipedia.org/wiki/Discrete_Fourier_transform
+// il s'agit de l'équation 1 
 function dft(x) {
     const X = [];
     const N = x.length;
@@ -34,7 +38,9 @@ function dft(x) {
       sum.im = sum.im / N;
   
       let freq = k;
+    //   L'amplitude est calculé avec le théorème de Pythagore
       let amp = sqrt(sum.re * sum.re + sum.im * sum.im);
+    //   La pahse est calculé à l'aide de la trigonométrie
       let phase = atan2(sum.im, sum.re);
       X[k] = { re: sum.re, im: sum.im, freq, amp, phase };
     }
