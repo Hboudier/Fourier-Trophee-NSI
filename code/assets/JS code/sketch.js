@@ -3,10 +3,10 @@
 
 const USER = 0;
 const FOURIER = 1;
+
+let drawing3 = [];
 let state = -1;
 
-let list_x = [];
-let list_y = [];
 let x = [];
 let points2 = [];
 let fourierX;
@@ -14,11 +14,12 @@ let canvas;
 let points;
 const skip = 10;
 
-let drawing3 = []
+// let drawing3 = []
 let time = 0;
 let path = [];
 let slider;
 let sel;
+let button;
 let user_drawing = false
 
 let style = 'Rainbow';
@@ -34,13 +35,12 @@ function setup() {
   y_max = drawing[0].y
   y_min = drawing[0].y
   for (let i = 0; i < drawing.length; i += skip){
-    // const c = new Complex(drawing2[i][0], drawing2[i][1]);
     const c = new Complex(drawing[i].x, drawing[i].y);
     x.push(c);
-    // if(drawing[i].x > x_max){ x_max = drawing[i].x}
-    // if(drawing[i].x < x_min){ x_min = drawing[i].x}
-    // if(drawing[i].y > y_max){ y_max = drawing[i].y}
-    // if(drawing[i].y < y_min){ y_min = drawing[i].y}
+    if(drawing[i].x > x_max){ x_max = drawing[i].x}
+    if(drawing[i].x < x_min){ x_min = drawing[i].x}
+    if(drawing[i].y > y_max){ y_max = drawing[i].y}
+    if(drawing[i].y < y_min){ y_min = drawing[i].y}
   }
   
 
@@ -54,7 +54,7 @@ function setup() {
 
 
   // Crée un slider qui permet de modifier la quantité d'épicycles
-  slider = createSlider(1,1000,250);
+  slider = createSlider(1,1000,(400));
   slider.input(updateValue);
   updateValue();
   slider.style('width', '40%');
@@ -65,9 +65,9 @@ function setup() {
 
   // Crée un menu déroulant qui permet de modifier le style de l'animation
   sel = createSelect();
-  sel.style('width', '20%');
+  sel.style('width', '10%');
   sel.style('position', 'absolute');
-  sel.style('left', '40%');
+  sel.style('left', '35%');
   sel.style('top', '80%');
   sel.style('transform', 'translateX(-50%)');
   sel.option('Finish');
@@ -78,15 +78,23 @@ function setup() {
   sel.changed(change_anim);
 
   forme = createSelect();
-  forme.style('width', '19%');
+  forme.style('width', '10%');
   forme.style('position', 'absolute');
-  forme.style('left', '60%');
+  forme.style('left', '46%');
   forme.style('top', '80%');
   forme.style('transform', 'translateX(-50%)');
   forme.option('Custom');
   forme.option('Train');
+  forme.option('User Input');
   forme.selected('Train');
   forme.changed(change_shape)
+
+  button = createButton('Réinitialiser Chemin');
+  button.mousePressed(clear_path);
+  button.style('position', 'absolute');
+  button.style('left', '55%');
+  button.style('top', '80%');
+
 }
 
 // Fonction qui permet de changer le style d'animation lorsque la sélection du menu déroulant est modifié
@@ -99,22 +107,49 @@ function change_shape(){
   if (forme.value() == 'Train'){
     x = []
     time = 0
-    // user_drawing = false
+    path = [];
+    user_drawing = false
     for (let i = 0; i < drawing.length; i += skip){
-      // const c = new Complex(drawing2[i][0], drawing2[i][1]);
       const c = new Complex(drawing[i].x, drawing[i].y);
       x.push(c);
-
     }
+
     fourierX = dft(x);
     fourierX.sort((a,b) => b.amp - a.amp);
   }
 
   if (forme.value() == 'Custom'){
-		background(51);
-		user_drawing = true;
+    x = [];
+    time = 0;
+    path = [];
+
+    x_max = drawing2[0][0]
+    x_min = drawing2[0][0]
+    y_max = drawing2[0][1]
+    y_min = drawing2[0][1]
+
+  for (let i = 0; i < drawing2.length; i += skip){
+    const c = new Complex(drawing2[i][0] - 200, drawing2[i][1] - 300);
+    x.push(c);
+  }
+  fourierX = dft(x);
+  fourierX.sort((a,b) => b.amp - a.amp); 
 	}
-  // console.log(user_drawing)
+
+  if (forme.value() == 'User Input'){
+    x = []
+    time = 0
+    path = [];
+    user_drawing = true
+    background(51);
+  }
+
+}
+
+
+function clear_path() {
+  time = 0;
+  path = [];
 }
 
 
@@ -130,48 +165,36 @@ function epicycles(x, y, rotation, fourier) {
     x += radius * cos(freq * time + phase + rotation);
     y += radius * sin(freq * time + phase + rotation);
 
+    if(i <=100){
     strokeWeight(2)
     colorMode(RGB)
-    stroke(255, 100);
+    stroke(255, 0, 255, 255);
     noFill();
     ellipse(prevx, prevy, radius * 2);
-    stroke(255);
+    stroke(255, 0, 255, 255);
     line(prevx,prevy,x,y);
+    }
   } 
   return createVector(x, y);
   
 }
 // Draw avec la bobliothèque p5 est une boucle qui se répète
 function draw() {
-  if (state == USER && user_drawing == true) {
-    let point = createVector(mouseX - width / 2, mouseY - height / 2);
-    drawing3.push(point);
-    console.log(drawing3)
-    stroke(255);
-    noFill();
-    beginShape();
-    for (let v of drawing3) {
-      vertex(v.x + width / 2, v.y + height / 2);
+  if (state == USER && user_drawing) {
+    background(51);
+      let point = createVector(mouseX - width / 2, mouseY - height / 2);
+      drawing3.push(point);
+      stroke(255);
+      noFill();
+      beginShape();
+      for (let v of drawing3) {
+        vertex(v.x + width / 2, v.y + height / 2);
+      }
+      endShape();
     }
-    endShape();
-  } else if (state == FOURIER && user_drawing == true) {
-    let vx = epiCycles(width / 2, 100, 0, fourierX);
-    let vy = epiCycles(100, height / 2, HALF_PI, fourierY);
-    let v = createVector(vx.x, vy.y);
-    path.unshift(v);
-    line(vx.x, vx.y, v.x, v.y);
-    line(vy.x, vy.y, v.x, v.y);
-
-    beginShape();
-    noFill();
-    for (let i = 0; i < path.length; i++) {
-      vertex(path[i].x, path[i].y);
-    }
-    endShape();
-  }
 
 
-  if (!user_drawing) {
+  if (state != USER) {
   background(0);
   // Utilise la fonction épicycles pour tracer les épicycles nécessaires
   let v = epicycles(width / 2, height / 2, 0, fourierX);
@@ -222,6 +245,20 @@ if (style == 'Finish' ){
   }
 }
 
+
+if (style == 'Rainbow' ){
+  if (path.length > fourierX.length * 1.1) {
+    path.pop();
+  }
+}
+
+
+if (style == 'Stay' ){
+  if (path.length > fourierX.length * 1.1) {
+    path.pop();
+  }
+}
+
 if (style == 'Follow' ){
   if (time > TWO_PI) {
     time = 0;
@@ -242,73 +279,26 @@ function updateValue(){
   document.getElementById("sliderValue").innerHTML = slider.value();
 }
 
+
 function mousePressed() {
-  if (user_drawing == true){
+  if (user_drawing){
     state = USER;
     drawing3 = [];
     x = [];
-    y = [];
     time = 0;
     path = [];
   }
 }
 
 function mouseReleased() {
-  if (user_drawing == true){
-    state = FOURIER;
-    const skip = 1;
-    for (let i = 0; i < drawing3.length; i += skip) {
-      const c = new Complex(drawing3[i].x, drawing3[i].y);
-      x.push(c);
-    }
-    fourierX = dft(x);
-    console.log(fourierX)
-    fourierX.sort((a, b) => b.amp - a.amp);
+  if (user_drawing){
+  state = FOURIER;
+  for (let i = 0; i < drawing3.length; i ++) {
+    x.push(new Complex(drawing3[i].x, drawing3[i].y));
+  }
+  console.log(drawing3)
+  fourierX = dft(x);
+  console.log(fourierX)
+  fourierX.sort((a, b) => b.amp - a.amp);
   }
 }
-
-
-
-
-
-
-
-
-
-// function mousePressed() {
-// 	if ((forme.value() == 'Custom') && ((mouseX < width) && (mouseY < height))) {
-// 		background(51);
-// 		user_drawing = true;
-// 		points = [];
-// 	}
-// }
-
-
-// function mouseDragged() {
-// 	if ((forme.value() == 'Custom') && ((mouseX < width) && (mouseY < height))) {
-// 		noFill();
-// 		stroke(255, 0, 0);
-// 		strokeWeight(4);
-// 		line(pmouseX, pmouseY, mouseX, mouseY);
-// 	  points.unshift([mouseX - width/2, mouseY - height/2]);
-//     // points.unshift([mouseX, mouseY]);
-// 	}
-// }
-
-
-// function mouseReleased() {
-//   points2 = []
-// 	if ((forme.value() == 'Custom') && ((mouseX < width) && (mouseY < height))) {
-//     for (let i = 0; i < points.length; i += skip){
-//       const c = new Complex(points[i][0], drawing[i][1]);
-//       points2.push(c);
-//     }
-// 		user_drawing = false;
-// 		path = [];
-// 		fourierX = dft(points2);
-//     console.log(dft(points2))
-//     fourierX.sort((a,b) => b.amp - a.amp);
-// 		time = 0;
-//     console.log(fourierX)
-// 	}
-
