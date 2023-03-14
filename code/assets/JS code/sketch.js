@@ -3,9 +3,10 @@
 
 const USER = 0;
 const FOURIER = 1;
+const PRESET = -1
 
 let drawing3 = [];
-let state = -1;
+let state = PRESET;
 
 let x = [];
 let points2 = [];
@@ -27,6 +28,16 @@ let style = 'Rainbow';
 
 function setup() {
   canvas = createCanvas(800, 600);
+  // canvas.position((windowWidth - 800) / 2, (windowHeight - 600) / 2, 'absolute');
+  const canvasX = canvas.position().x;
+  const canvasY = canvas.position().y;
+  
+  // log the coordinates to the console
+  console.log("Canvas X:", canvasX);
+  console.log("Canvas Y:", canvasY);
+  // canvas.parent('canvas-container'); // Set the canvas parent element
+  // console.log("Canvas position: (" + canvas.offsetLeft + ", " + canvas.offsetTop + ")");
+
 
   // Le programme ne prend en compte qu'une coordonnée sur 10
   // Effectue la tranformation de Fourier sur les coordonnées du fichier "codingtrain.js"
@@ -108,7 +119,8 @@ function change_shape(){
     x = []
     time = 0
     path = [];
-    user_drawing = false
+    user_drawing = false;
+    state = PRESET;
     for (let i = 0; i < drawing.length; i += skip){
       const c = new Complex(drawing[i].x, drawing[i].y);
       x.push(c);
@@ -122,6 +134,9 @@ function change_shape(){
     x = [];
     time = 0;
     path = [];
+    user_drawing = false;
+    state = PRESET;
+
 
     x_max = drawing2[0][0]
     x_min = drawing2[0][0]
@@ -194,7 +209,7 @@ function draw() {
     }
 
 
-  if (state != USER) {
+  if (state != USER ) {
   background(0);
   // Utilise la fonction épicycles pour tracer les épicycles nécessaires
   let v = epicycles(width / 2, height / 2, 0, fourierX);
@@ -281,7 +296,7 @@ function updateValue(){
 
 
 function mousePressed() {
-  if (user_drawing){
+  if (user_drawing && keyIsDown(SHIFT)){
     state = USER;
     drawing3 = [];
     x = [];
@@ -296,9 +311,10 @@ function mouseReleased() {
   for (let i = 0; i < drawing3.length; i ++) {
     x.push(new Complex(drawing3[i].x, drawing3[i].y));
   }
-  console.log(drawing3)
   fourierX = dft(x);
-  console.log(fourierX)
   fourierX.sort((a, b) => b.amp - a.amp);
+  slider.elt.max = fourierX.length
+  slider.value(fourierX.length);
+  updateValue()
   }
 }
