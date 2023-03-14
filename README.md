@@ -12,3 +12,8 @@ If you have any trouble launching the website, contact us via email at:
 - antoine.heurtier@eleve.lfb.es
 
 --- LE CODE N'EST PAS FAIT POUR MOBILE, A UTILISER EN GRAND ECRAN SUR ORDINATEUR ---
+
+A faire:
+1. Faire l'application python pour le traitement d'image
+2. Améliorer la page html
+3. Si possible faire que lorsque l'utilisateur fait le dessin, que le dessin ne se fasse pas si la souris est hors du canvas
