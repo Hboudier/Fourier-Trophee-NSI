@@ -306,7 +306,7 @@ function mousePressed() {
 }
 
 function mouseReleased() {
-  if (user_drawing){
+  if (user_drawing && state == USER){
   state = FOURIER;
   for (let i = 0; i < drawing3.length; i ++) {
     x.push(new Complex(drawing3[i].x, drawing3[i].y));
