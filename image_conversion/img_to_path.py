@@ -7,6 +7,14 @@ from PIL import Image, ImageTk
 import threading
 
 
+# Ce programme contient une application permettant de créer le fichier path.js à partir d'une image
+# Pour l'utiliser:
+#   - Mettez l'image dans le dossier avec le programme
+#   - Lancez le programme 
+#   - entrez le nom de l'image
+#   - Appuyez sur le bouton et attendez
+#  !!! La conversion prend du temps !!!
+
 def scale(img):
     scale_percent = min(800 / img.shape[1], 600 / img.shape[0])
     width = int(img.shape[1] * scale_percent)
