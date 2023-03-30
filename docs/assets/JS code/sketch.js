@@ -13,6 +13,8 @@ let points2 = [];
 let fourierX;
 let canvas;
 let points;
+
+// Le programme ne prend en compte qu'une coordonnée sur 10
 const skip = 10;
 
 // let drawing3 = []
@@ -28,41 +30,17 @@ let style = 'Rainbow';
 
 function setup() {
   canvas = createCanvas(800, 600);
-  // canvas.position((windowWidth - 800) / 2, (windowHeight - 600) / 2, 'absolute');
-  const canvasX = canvas.position().x;
-  const canvasY = canvas.position().y;
-  
-  // log the coordinates to the console
-  console.log("Canvas X:", canvasX);
-  console.log("Canvas Y:", canvasY);
-  // canvas.parent('canvas-container'); // Set the canvas parent element
-  // console.log("Canvas position: (" + canvas.offsetLeft + ", " + canvas.offsetTop + ")");
+  canvas.parent('sketch-holder');
 
 
-  // Le programme ne prend en compte qu'une coordonnée sur 10
   // Effectue la tranformation de Fourier sur les coordonnées du fichier "codingtrain.js"
-  x_max = drawing[0].x
-  x_min = drawing[0].x
-  y_max = drawing[0].y
-  y_min = drawing[0].y
   for (let i = 0; i < drawing.length; i += skip){
     const c = new Complex(drawing[i].x, drawing[i].y);
     x.push(c);
-    if(drawing[i].x > x_max){ x_max = drawing[i].x}
-    if(drawing[i].x < x_min){ x_min = drawing[i].x}
-    if(drawing[i].y > y_max){ y_max = drawing[i].y}
-    if(drawing[i].y < y_min){ y_min = drawing[i].y}
   }
   
-
-  // console.log(x_max);
-  // console.log(x_min);
-  // console.log(y_max);
-  // console.log(y_min);
-
   fourierX = dft(x);
   fourierX.sort((a,b) => b.amp - a.amp);
-
 
   // Crée un slider qui permet de modifier la quantité d'épicycles
   slider = createSlider(1,1000,(400));
@@ -70,16 +48,16 @@ function setup() {
   updateValue();
   slider.style('width', '40%');
   slider.style('position', 'absolute');
-  slider.style('left', '50%');
-  slider.style('top', '73%');
+  slider.style('left', '67.5%');
+  slider.style('top', '87%');
   slider.style('transform', 'translateX(-50%)');
 
   // Crée un menu déroulant qui permet de modifier le style de l'animation
   sel = createSelect();
   sel.style('width', '10%');
   sel.style('position', 'absolute');
-  sel.style('left', '35%');
-  sel.style('top', '80%');
+  sel.style('left', '53%');
+  sel.style('top', '90%');
   sel.style('transform', 'translateX(-50%)');
   sel.option('Finish');
   sel.option('Follow');
@@ -91,11 +69,17 @@ function setup() {
   forme = createSelect();
   forme.style('width', '10%');
   forme.style('position', 'absolute');
-  forme.style('left', '46%');
-  forme.style('top', '80%');
+  forme.style('left', '66%');
+  forme.style('top', '90%');
   forme.style('transform', 'translateX(-50%)');
-  forme.option('Custom');
+  forme.option('Path.js file');
   forme.option('Train');
+  forme.option('Pikachu');
+  forme.option('Lfb');
+  forme.option('Kiwi');
+  forme.option('Star');
+  forme.option('Pi');
+  forme.option('Fourier');
   forme.option('User Input');
   forme.selected('Train');
   forme.changed(change_shape)
@@ -103,8 +87,8 @@ function setup() {
   button = createButton('Réinitialiser Chemin');
   button.mousePressed(clear_path);
   button.style('position', 'absolute');
-  button.style('left', '55%');
-  button.style('top', '80%');
+  button.style('left', '75%');
+  button.style('top', '90%');
 
 }
 
@@ -128,9 +112,12 @@ function change_shape(){
 
     fourierX = dft(x);
     fourierX.sort((a,b) => b.amp - a.amp);
+    slider.elt.max = fourierX.length;
+    slider.value(fourierX.length);
+    document.getElementById("sliderValue").innerHTML = slider.value();
   }
 
-  if (forme.value() == 'Custom'){
+  else if (forme.value() == 'Path.js file'){
     x = [];
     time = 0;
     path = [];
@@ -143,21 +130,150 @@ function change_shape(){
     y_max = drawing2[0][1]
     y_min = drawing2[0][1]
 
+    for (let i = 1; i < drawing2.length; i += skip){
+
+      if(drawing2[i][0] > x_max){ x_max = drawing2[i][0]}
+      if(drawing2[i][0] < x_min){ x_min = drawing2[i][0]}
+      if(drawing2[i][1] > y_max){ y_max = drawing2[i][1]}
+      if(drawing2[i][1] < y_min){ y_min = drawing2[i][1]}
+    }
+
+
   for (let i = 0; i < drawing2.length; i += skip){
-    const c = new Complex(drawing2[i][0] - 200, drawing2[i][1] - 300);
+    const c = new Complex(drawing2[i][0] - ((x_max - x_min) / 2), drawing2[i][1] - ((y_max - y_min) / 2));
     x.push(c);
   }
+
   fourierX = dft(x);
   fourierX.sort((a,b) => b.amp - a.amp); 
+  slider.elt.max = fourierX.length;
+  slider.value(fourierX.length); 
+  document.getElementById("sliderValue").innerHTML = slider.value();
 	}
 
-  if (forme.value() == 'User Input'){
+  else if (forme.value() == 'User Input'){
     x = []
     time = 0
     path = [];
     user_drawing = true
     background(51);
   }
+
+  else if (forme.value() == 'Kiwi'){
+        x = []
+    time = 0
+    path = [];
+    user_drawing = false;
+    state = PRESET;
+    for (let i = 0; i < kiwi.length; i += skip){
+      const c = new Complex(kiwi[i].x, kiwi[i].y);
+      x.push(c);
+    }
+
+    fourierX = dft(x);
+    fourierX.sort((a,b) => b.amp - a.amp);
+    slider.elt.max = fourierX.length;
+    slider.value(fourierX.length); 
+    document.getElementById("sliderValue").innerHTML = slider.value();
+  }
+  
+  
+  else if (forme.value() == 'Star'){
+    x = []
+    time = 0
+    path = [];
+    user_drawing = false;
+    state = PRESET;
+    for (let i = 0; i < star.length; i += skip){
+      const c = new Complex((star[i].x - 50) * 1.5, (star[i].y - 50) * 1.5);
+      x.push(c);
+    }
+
+    fourierX = dft(x);
+    fourierX.sort((a,b) => b.amp - a.amp);
+    slider.elt.max = fourierX.length;
+    slider.value(fourierX.length);
+    document.getElementById("sliderValue").innerHTML = slider.value(); 
+}
+
+
+else if (forme.value() == 'Pi'){
+  x = [];
+  time = 0;
+  path = [];
+  user_drawing = false;
+  state = PRESET;
+
+  for (let i = 0; i < pi.length; i += skip){
+    const c = new Complex(pi[i][0] - 305, pi[i][1] - 296.5);
+    x.push(c);
+  }
+  fourierX = dft(x);
+  fourierX.sort((a,b) => b.amp - a.amp);
+  slider.elt.max = fourierX.length;
+  slider.value(fourierX.length); 
+  document.getElementById("sliderValue").innerHTML = slider.value();
+}
+
+
+else if (forme.value() == 'Pikachu'){
+  x = [];
+  time = 0;
+  path = [];
+  user_drawing = false;
+  state = PRESET;
+
+  for (let i = 0; i < pikachu.length; i += skip){
+    const c = new Complex(pikachu[i][0] - 246.5, pikachu[i][1] - 287);
+    x.push(c);
+  }
+
+  fourierX = dft(x);
+  fourierX.sort((a,b) => b.amp - a.amp); 
+  slider.elt.max = fourierX.length;
+  slider.value(fourierX.length);
+  document.getElementById("sliderValue").innerHTML = slider.value();
+}
+
+else if (forme.value() == 'Lfb'){
+  x = [];
+  time = 0;
+  path = [];
+  user_drawing = false;
+  state = PRESET;
+
+  for (let i = 0; i < lfb.length; i += skip){
+    const c = new Complex(lfb[i][0] - 399.5, lfb[i][1] - 253.5);
+    x.push(c);
+  }
+
+
+  fourierX = dft(x);
+  fourierX.sort((a,b) => b.amp - a.amp); 
+  slider.elt.max = fourierX.length;
+  slider.value(fourierX.length);
+  document.getElementById("sliderValue").innerHTML = slider.value();
+}
+
+else if (forme.value() == 'Fourier'){
+  x = [];
+  time = 0;
+  path = [];
+  user_drawing = false;
+  state = PRESET;
+
+
+for (let i = 0; i < fourier.length; i += skip){
+  const c = new Complex(fourier[i][0] - 219.5, fourier[i][1] - 284.5);
+  x.push(c);
+}
+
+fourierX = dft(x);
+fourierX.sort((a,b) => b.amp - a.amp); 
+slider.elt.max = fourierX.length;
+slider.value(fourierX.length); 
+document.getElementById("sliderValue").innerHTML = slider.value();
+}
 
 }
 
@@ -180,7 +296,11 @@ function epicycles(x, y, rotation, fourier) {
     x += radius * cos(freq * time + phase + rotation);
     y += radius * sin(freq * time + phase + rotation);
 
-    if(i <=100){
+
+
+    // afin d'éviter d'utiliser trop de puissance de calcul lors du tracé 
+    // le nombre d'épicycle sur la canvas est limité à 80  
+    if(i <=80){
     strokeWeight(2)
     colorMode(RGB)
     stroke(255, 0, 255, 255);
@@ -290,13 +410,9 @@ if (style == 'Follow' ){
 
 }
 
-function updateValue(){
-  document.getElementById("sliderValue").innerHTML = slider.value();
-}
-
-
 function mousePressed() {
   if (user_drawing && keyIsDown(SHIFT)){
+    
     state = USER;
     drawing3 = [];
     x = [];
@@ -318,3 +434,10 @@ function mouseReleased() {
   updateValue()
   }
 }
+
+
+
+function updateValue(){
+  document.getElementById("sliderValue").innerHTML = slider.value();
+}
+
