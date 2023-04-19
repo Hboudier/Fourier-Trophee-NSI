@@ -17,7 +17,6 @@ let points;
 // Le programme ne prend en compte qu'une coordonnée sur 10
 const skip = 10;
 
-// let drawing3 = []
 let time = 0;
 let path = [];
 let slider;
@@ -33,30 +32,35 @@ function setup() {
   canvas.parent('sketch-holder');
 
 
-  // Effectue la tranformation de Fourier sur les coordonnées du fichier "codingtrain.js"
-  for (let i = 0; i < drawing.length; i += skip){
-    const c = new Complex(drawing[i].x, drawing[i].y);
+  x = [];
+  time = 0;
+  path = [];
+  user_drawing = false;
+  state = PRESET;
+
+  for (let i = 0; i < pi.length; i += skip){
+    const c = new Complex(pi[i][0] - 305, pi[i][1] - 296.5);
     x.push(c);
   }
-  
   fourierX = dft(x);
   fourierX.sort((a,b) => b.amp - a.amp);
+
 
   // Crée un slider qui permet de modifier la quantité d'épicycles
   slider = createSlider(1,1000,(400));
   slider.input(updateValue);
   updateValue();
-  slider.style('width', '40%');
+  slider.style('width', '800px');
   slider.style('position', 'absolute');
-  slider.style('left', '67.5%');
+  slider.style('left', '50%');
   slider.style('top', '87%');
   slider.style('transform', 'translateX(-50%)');
 
   // Crée un menu déroulant qui permet de modifier le style de l'animation
   sel = createSelect();
-  sel.style('width', '10%');
+  sel.style('width', '200px');
   sel.style('position', 'absolute');
-  sel.style('left', '53%');
+  sel.style('left', '38%');
   sel.style('top', '90%');
   sel.style('transform', 'translateX(-50%)');
   sel.option('Finish');
@@ -67,27 +71,29 @@ function setup() {
   sel.changed(change_anim);
 
   forme = createSelect();
-  forme.style('width', '10%');
+  forme.style('width', '200px');
   forme.style('position', 'absolute');
-  forme.style('left', '66%');
+  forme.style('left', '50%');
   forme.style('top', '90%');
   forme.style('transform', 'translateX(-50%)');
   forme.option('Path.js file');
-  forme.option('Train');
   forme.option('Pikachu');
   forme.option('Lfb');
   forme.option('Kiwi');
   forme.option('Star');
+  forme.option('Serie Fourier');
   forme.option('Pi');
   forme.option('Fourier');
   forme.option('User Input');
-  forme.selected('Train');
+  forme.selected('Pi'); 
   forme.changed(change_shape)
 
   button = createButton('Réinitialiser Chemin');
+  button.style('width', '150px');
+  button.style('height', '25px');
   button.mousePressed(clear_path);
   button.style('position', 'absolute');
-  button.style('left', '75%');
+  button.style('left', '60%');
   button.style('top', '90%');
 
 }
@@ -99,25 +105,7 @@ function change_anim(){
 
 function change_shape(){
 
-  if (forme.value() == 'Train'){
-    x = []
-    time = 0
-    path = [];
-    user_drawing = false;
-    state = PRESET;
-    for (let i = 0; i < drawing.length; i += skip){
-      const c = new Complex(drawing[i].x, drawing[i].y);
-      x.push(c);
-    }
-
-    fourierX = dft(x);
-    fourierX.sort((a,b) => b.amp - a.amp);
-    slider.elt.max = fourierX.length;
-    slider.value(fourierX.length);
-    document.getElementById("sliderValue").innerHTML = slider.value();
-  }
-
-  else if (forme.value() == 'Path.js file'){
+  if (forme.value() == 'Path.js file'){
     x = [];
     time = 0;
     path = [];
@@ -143,6 +131,9 @@ function change_shape(){
     const c = new Complex(drawing2[i][0] - ((x_max - x_min) / 2), drawing2[i][1] - ((y_max - y_min) / 2));
     x.push(c);
   }
+  console.log((x_max - x_min) / 2)
+  console.log((y_max - y_min) / 2)
+
 
   fourierX = dft(x);
   fourierX.sort((a,b) => b.amp - a.amp); 
@@ -225,6 +216,25 @@ else if (forme.value() == 'Pikachu'){
 
   for (let i = 0; i < pikachu.length; i += skip){
     const c = new Complex(pikachu[i][0] - 246.5, pikachu[i][1] - 287);
+    x.push(c);
+  }
+
+  fourierX = dft(x);
+  fourierX.sort((a,b) => b.amp - a.amp); 
+  slider.elt.max = fourierX.length;
+  slider.value(fourierX.length);
+  document.getElementById("sliderValue").innerHTML = slider.value();
+}
+
+else if (forme.value() == 'Serie Fourier'){
+  x = [];
+  time = 0;
+  path = [];
+  user_drawing = false;
+  state = PRESET;
+
+  for (let i = 0; i < serie_fourier.length; i += skip){
+    const c = new Complex(serie_fourier[i][0] - 393, serie_fourier[i][1] - 119);
     x.push(c);
   }
 

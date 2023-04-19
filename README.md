@@ -12,7 +12,6 @@ If you have any trouble launching the website, contact us via email at:
 - antoine.heurtier@eleve.lfb.es
 
 A faire:
-- Faire l'application python pour le traitement d'image
 - Améliorer la page html
 - Si possible faire que lorsque l'utilisateur fait le dessin, que le dessin ne se fasse pas si la souris est hors du canvas
 
