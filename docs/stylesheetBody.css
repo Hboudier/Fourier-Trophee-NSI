@@ -15,24 +15,25 @@
 }
 
 
-.text-with-sketch-on-the-right{
+.text-on-bottom{
+    position: absolute;
     width: 40%;
-    float: left;
-
-    margin-left: 10%;
-    padding-top: 50px;
-
+    /* float: left; */
+    text-align: center;
+    left: 30%;
+    /* padding-top: 50px; */
     font-family: 'Lato Regular', sans-serif;
     font-size: 22px;
+
+    top: 800px;
 }
 
 .slider-value-text{
     position: absolute;
     width: 100%;
-    color: white;
+    color: lime;
     text-align: center;
     top: 82%;
-    left: 18%;
 }
 
 

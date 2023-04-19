@@ -50,7 +50,7 @@ function setup() {
   slider = createSlider(1,1000,(400));
   slider.input(updateValue);
   updateValue();
-  slider.style('width', '800px');
+  slider.style('width', '40%');
   slider.style('position', 'absolute');
   slider.style('left', '50%');
   slider.style('top', '87%');
@@ -58,7 +58,7 @@ function setup() {
 
   // Crée un menu déroulant qui permet de modifier le style de l'animation
   sel = createSelect();
-  sel.style('width', '200px');
+  sel.style('width', '11%');
   sel.style('position', 'absolute');
   sel.style('left', '38%');
   sel.style('top', '90%');
@@ -71,7 +71,7 @@ function setup() {
   sel.changed(change_anim);
 
   forme = createSelect();
-  forme.style('width', '200px');
+  forme.style('width', '11%');
   forme.style('position', 'absolute');
   forme.style('left', '50%');
   forme.style('top', '90%');
@@ -89,8 +89,8 @@ function setup() {
   forme.changed(change_shape)
 
   button = createButton('Réinitialiser Chemin');
-  button.style('width', '150px');
-  button.style('height', '25px');
+  button.style('width', '11%');
+  button.style('height', '3%');
   button.mousePressed(clear_path);
   button.style('position', 'absolute');
   button.style('left', '60%');
