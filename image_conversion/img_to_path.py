@@ -1,3 +1,4 @@
+# Import all the dependencies
 import cv2
 import math
 import numpy as np
@@ -14,7 +15,10 @@ import threading
 #   - entrez le nom de l'image
 #   - Appuyez sur le bouton et attendez
 #  !!! La conversion prend du temps !!!
+# Pour réduire le plus possible le temps, choisir des images simples avec peu de formes  
 
+
+# Define function to scale the image down to 800x600
 def scale(img):
     scale_percent = min(800 / img.shape[1], 600 / img.shape[0])
     width = int(img.shape[1] * scale_percent)
@@ -25,12 +29,12 @@ def scale(img):
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
     return resized
 
-
+# Define function to convert image to grayscale
 def grayscale(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
     return gray
 
-
+# Define function to extract coordinates of the white pixels in the image
 def coords(img):
   path = []
   coord = np.nonzero(img)
@@ -38,25 +42,16 @@ def coords(img):
       path.append((coord[0][i], coord[1][i]))
   return path
 
-def list_simple(liste):
-  simple = []
-  for i in range(len(liste)//10):
-      simple.append(liste[i * 10])
-  return simple
-
-
+# Define function to calculate the Euclidean distance between two points
 def distance(A, B): 
-    "The Euclidean distance between two points."
-    return math.sqrt((A[0]-B[0])**2 + (A[1]-B[1])**2)
+     return math.sqrt((A[0]-B[0])**2 + (A[1]-B[1])**2)
 
+# Define function to return the first element in a collection
 def first(collection):
-    "Start iterating over collection, and return the first element."
-    return next(iter(collection))
+     return next(iter(collection))
 
+# Define function to implement the nearest neighbor algorithm for the traveling salesman problem
 def nn_tsp(points):
-    """Start the tour at the first city; at each step extend the tour 
-    by moving from the previous city to the nearest neighboring city, C,
-    that has not yet been visited."""
     start = first(points)
     tour = [start]
     unvisited = set(points - {start})
@@ -66,11 +61,14 @@ def nn_tsp(points):
         unvisited.remove(C)
     return tour
 
+
+# Define function to find the nearest neighboring point to a given point
 def nearest_neighbor(A, points):
-    "Find the city in points that is nearest to city A."
     return min(points, key=lambda c: distance(c, A))
 
 
+
+# Define function to return a string representation of a list of coordinates in JavaScript format
 def coords2(img):
     path = "let drawing2 = ["
     for i in range(len(img)-1):
@@ -79,6 +77,8 @@ def coords2(img):
     return path
 
 
+
+# Define function which applies all of the above functions on an image to get the path  
 def create_path(img_path):
     error = tk.Label(root, text="L'image n'a pas été trouvé")
     error.pack_forget()
@@ -96,7 +96,6 @@ def create_path(img_path):
         cv2.imwrite('output.jpg', edges)
 
         points = coords(edges)
-        # simple = list_simple(points)
         path = nn_tsp(set(points))
         path2 = coords2(path)
         file = open("path.js", "w")
@@ -120,6 +119,7 @@ def create_path(img_path):
     progress.pack_forget()
 
 
+# Define function which gets the path of the image
 def choose_image():
     img_path = entry.get()
     create_path(img_path)
@@ -164,7 +164,7 @@ try:
     label = tk.Label(image=tk_image)
     label.pack()
 except FileNotFoundError: 
-    print("file")
+    print("file not found")
 
 
 # Start the Tkinter main loop

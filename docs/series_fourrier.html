@@ -14,14 +14,14 @@
 <header>
     <div class="header">
 
-        <a href="index.html" class="home">Illustration du Theoreme des series de Fourrier</a>
+        <a href="index.html" class="home">SpiroDraw</a>
         <h1 class="logo"></h1>
 
         <nav>
             <ul>
                 <li><a href="index.html">Notre Projet</a></li>
-                <li><a href="series_fourrier.html">Series de Fourrier</a></li>
-                <li><a href="explication_code.html">Explication du code</a></li>
+                <li><a href="equipe.html">Présentation de l'équipe</a></li>
+                <li><a href="series_fourrier.html">Explication</a></li>
             </ul>
         </nav>
 
@@ -40,20 +40,56 @@
 
     <h2> Que sont les series de Fourrier?</h2>
 
-    <p>Les séries de Fourier ont été introduites par Joseph Fourier en 1822, mais il a fallu un siècle pour que les analystes dégagent les outils d'étude adaptés</p>
+    <p>Les séries de Fourier sont une méthode mathématique qui permet de représenter une fonction périodique comme une somme infinie de fonctions sinus et cosinus. </p>
     <br>
-    <p>Les series de Fourrier sont, en mathematiques, un outil fondamental dans l'etude des fonctions periodiques. 
-        C'est à partir de ce concept que s'est développée la branche des mathématiques connue sous le nom d'analyse harmonique.</p>
+    <p>Cette méthode a été introduite par Joseph Fourier au début du XIXe siècle et elle est utilisée dans de nombreux domaines, notamment en physique, en ingénierie et en mathématiques appliquées.</p>
     <br>
-    <p>Un signal périodique de fréquence <i>f</i> et de forme quelconque peut être obtenu en ajoutant à une sinusoïde de fréquence <i>f</i> (frequence fondamentale),
-         des sinusoïdes dont les fréquences sont des multiples entiers de <i>f</i>. Ces signaux ont des amplitudes et des positions de phase appropriées.</p>
+    <p>L'idée est de décomposer une fonction périodique en une série de fonctions sinusoïdales qui ont des fréquences multiples de la fréquence fondamentale de la fonction.</p>
     <br>
-    <p>De même, on peut décomposer toute onde récurrente en une somme de sinusoïdes (fondamentale et harmoniques).</p>
+    <p>Les coefficients de cette série de Fourier déterminent l'amplitude et la phase de chaque fonction sinusoïdale et sont calculés à partir de l'intégrale de la fonction périodique sur une période.</p>
     <br>
-    <p>Au-delà du problème de la décomposition, la théorie des séries de Fourier établit une correspondance entre la fonction périodique et les coefficients de Fourier.
-         De ce fait, l'analyse de Fourier peut être considérée comme une nouvelle façon de décrire les fonctions périodiques. 
-         Des opérations telles que la dérivation s'écrivent simplement en partant des coefficients de Fourier. 
-         La construction d'une fonction périodique solution d'une équation fonctionnelle peut se ramener à la construction des coefficients de Fourier correspondants.</p>
+    <p>Cette représentation en série de Fourier permet d'analyser et de synthétiser des signaux périodiques complexes.</p>
+    <br>
+    <br>
+
+    <h2> Canny edge detection?</h2>
+
+    <p>La détection de contours de Canny est une technique populaire de traitement d'images utilisée pour détecter les contours dans une image numérique.</p>
+    <br>
+    <p>Cette technique a été développée par John Canny en 1986 et est considérée comme l'une des méthodes les plus précises pour détecter les contours dans une image.</p>
+    <br>
+    <p>La méthode de Canny utilise plusieurs étapes pour détecter les contours : la suppression du bruit, le calcul du gradient de l'image, la suppression des pixels non maximaux, la recherche des seuils de gradient et la suppression des faux contours.</p>
+    <br>
+    <p>Tout d'abord, le bruit est réduit en appliquant un filtre gaussien à l'image.</p>
+    <br>
+    <p>Ensuite, le gradient de l'image est calculé à l'aide d'un opérateur de détection de contours, tel que le filtre de Sobel.</p>
+    <br>
+    <p>Les pixels qui ne sont pas des maxima locaux dans la direction du gradient sont ensuite supprimés pour éliminer les contours faibles et le bruit.</p>
+    <br>
+    <p>Ensuite, des seuils de gradient sont définis pour distinguer les contours forts des contours faibles.</p>
+    <br>
+    <p>Finalement, les faux contours sont supprimés en utilisant la méthode de l'hystérésis, où les pixels connectés à des pixels forts sont conservés et les autres sont supprimés.</p>
+    <br>
+
+    <h2> Travelling salesman problem?</h2>    
+
+    <p>Le problème du voyageur de commerce, ou travelling salesman problem en anglais, est un problème mathématique qui consiste à trouver le chemin le plus court possible qui permet à un voyageur de visiter toutes les villes d'une liste donnée et de revenir à son point de départ. </p>
+    <br>
+    <p>Ce problème est connu pour être l'un des problèmes d'optimisation combinatoire les plus difficiles, car le nombre de chemins possibles augmente de façon exponentielle avec le nombre de villes à visiter. </p>
+    <br>
+    <p>Plusieurs algorithmes ont été développés pour résoudre ce problème, tels que l'algorithme de force brute qui énumère toutes les permutations possibles de chemins, mais qui devient rapidement impraticable pour un nombre élevé de villes. </p>
+    <br>
+    <p>D'autres méthodes, telles que l'algorithme génétique ou l'algorithme de recuit simulé, utilisent des techniques d'optimisation pour trouver une solution approximative en un temps raisonnable. </p>
+    <br>
+    <p>Le problème du voyageur de commerce a des applications dans de nombreux domaines, tels que la logistique, la planification de circuits intégrés, la conception de réseaux de communication et la cartographie. </p>
+    <br>
+
+
+    <div class="footer">
+        <footer2>
+        <p>Projet de: Hugo Boudier et Antoine Heurtier   ||  Contact: <a href="mailto:hugo.boudier@eleve.lfb.es">hugo.boudier@eleve.lfb.es</a></p>
+        </footer2>
+    </div> 
 
 </div>
 </body>

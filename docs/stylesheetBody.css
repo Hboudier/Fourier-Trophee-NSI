@@ -25,7 +25,7 @@
     font-family: 'Lato Regular', sans-serif;
     font-size: 22px;
 
-    top: 800px;
+    top: 60px;
 }
 
 .slider-value-text{
@@ -33,7 +33,7 @@
     width: 100%;
     color: lime;
     text-align: center;
-    top: 82%;
+    top: 1065px;
 }
 
 
@@ -61,7 +61,36 @@ figcaption{
 
 #sketch-holder {
 position: absolute;
-top: 50%;
+top: 800px;
 left: 50%;
 transform: translate(-50%, -50%);
+}
+
+
+
+footer{
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    position: absolute;
+    top: 1200px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 20px;
+    background: #55d6aa;
+}
+
+
+footer2{
+    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    position: absolute;
+    top: 1800px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 20px;
+    background: #55d6aa;
 }

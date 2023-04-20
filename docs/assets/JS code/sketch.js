@@ -26,6 +26,9 @@ let user_drawing = false
 
 let style = 'Rainbow';
 
+// Valeur de décalage vertical pour les menu de selection 
+let decal = "1150px"
+
 
 function setup() {
   canvas = createCanvas(800, 600);
@@ -53,7 +56,7 @@ function setup() {
   slider.style('width', '40%');
   slider.style('position', 'absolute');
   slider.style('left', '50%');
-  slider.style('top', '87%');
+  slider.style('top', '1100px');
   slider.style('transform', 'translateX(-50%)');
 
   // Crée un menu déroulant qui permet de modifier le style de l'animation
@@ -61,7 +64,7 @@ function setup() {
   sel.style('width', '11%');
   sel.style('position', 'absolute');
   sel.style('left', '38%');
-  sel.style('top', '90%');
+  sel.style('top', decal);
   sel.style('transform', 'translateX(-50%)');
   sel.option('Finish');
   sel.option('Follow');
@@ -74,12 +77,12 @@ function setup() {
   forme.style('width', '11%');
   forme.style('position', 'absolute');
   forme.style('left', '50%');
-  forme.style('top', '90%');
+  forme.style('top', decal);
   forme.style('transform', 'translateX(-50%)');
   forme.option('Path.js file');
   forme.option('Pikachu');
   forme.option('Lfb');
-  forme.option('Kiwi');
+  forme.option('Dove');
   forme.option('Star');
   forme.option('Serie Fourier');
   forme.option('Pi');
@@ -94,7 +97,7 @@ function setup() {
   button.mousePressed(clear_path);
   button.style('position', 'absolute');
   button.style('left', '60%');
-  button.style('top', '90%');
+  button.style('top', decal);
 
 }
 
@@ -103,6 +106,7 @@ function change_anim(){
   style = sel.value();
 }
 
+// fonction qui permet de cahnger la forme
 function change_shape(){
 
   if (forme.value() == 'Path.js file'){
@@ -148,24 +152,6 @@ function change_shape(){
     path = [];
     user_drawing = true
     background(51);
-  }
-
-  else if (forme.value() == 'Kiwi'){
-        x = []
-    time = 0
-    path = [];
-    user_drawing = false;
-    state = PRESET;
-    for (let i = 0; i < kiwi.length; i += skip){
-      const c = new Complex(kiwi[i].x, kiwi[i].y);
-      x.push(c);
-    }
-
-    fourierX = dft(x);
-    fourierX.sort((a,b) => b.amp - a.amp);
-    slider.elt.max = fourierX.length;
-    slider.value(fourierX.length); 
-    document.getElementById("sliderValue").innerHTML = slider.value();
   }
   
   
@@ -285,9 +271,32 @@ slider.value(fourierX.length);
 document.getElementById("sliderValue").innerHTML = slider.value();
 }
 
+if (forme.value() == 'Dove'){
+  x = [];
+  time = 0;
+  path = [];
+  user_drawing = false;
+  state = PRESET;
+
+for (let i = 0; i < dove.length; i += skip){
+  const c = new Complex(dove[i][0] - 234.5, dove[i][1] - 270);
+  x.push(c);
 }
 
 
+fourierX = dft(x);
+fourierX.sort((a,b) => b.amp - a.amp); 
+slider.elt.max = fourierX.length;
+slider.value(fourierX.length); 
+document.getElementById("sliderValue").innerHTML = slider.value();
+}
+
+
+
+
+}
+
+// Fonction qui permet de réinitialiser le chemin
 function clear_path() {
   time = 0;
   path = [];
@@ -309,8 +318,9 @@ function epicycles(x, y, rotation, fourier) {
 
 
     // afin d'éviter d'utiliser trop de puissance de calcul lors du tracé 
-    // le nombre d'épicycle sur la canvas est limité à 80  
-    if(i <=80){
+    // le nombre d'épicycle tracé sur la canvas est limité à 80 
+    // Le chemin tracé ne suit pas cette limite donc monter au dela de 80 épicycles améliore la qualité de l'image
+    if(i <=10){
     strokeWeight(2)
     colorMode(RGB)
     stroke(255, 0, 255, 255);
