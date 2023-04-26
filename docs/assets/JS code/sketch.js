@@ -1,6 +1,3 @@
-// La fonciton pour changer l'ordre des épicycles ne fonctionne pas 
-
-
 const USER = 0;
 const FOURIER = 1;
 const PRESET = -1
@@ -320,7 +317,7 @@ function epicycles(x, y, rotation, fourier) {
     // afin d'éviter d'utiliser trop de puissance de calcul lors du tracé 
     // le nombre d'épicycle tracé sur la canvas est limité à 80 
     // Le chemin tracé ne suit pas cette limite donc monter au dela de 80 épicycles améliore la qualité de l'image
-    if(i <=10){
+    if(i <=80){
     strokeWeight(2)
     colorMode(RGB)
     stroke(255, 0, 255, 255);

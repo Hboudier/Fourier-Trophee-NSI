@@ -1,4 +1,3 @@
-# Import all the dependencies
 import cv2
 import math
 import numpy as np
@@ -6,16 +5,16 @@ import tkinter as tk
 from tkinter.ttk import Progressbar
 from PIL import Image, ImageTk
 import threading
+from tkinter import filedialog
 
 
 # Ce programme contient une application permettant de créer le fichier path.js à partir d'une image
 # Pour l'utiliser:
 #   - Mettez l'image dans le dossier avec le programme
 #   - Lancez le programme 
-#   - entrez le nom de l'image
-#   - Appuyez sur le bouton et attendez
+#   - Appuyez sur le bouton et choisissez votre image
 #  !!! La conversion prend du temps !!!
-# Pour réduire le plus possible le temps, choisir des images simples avec peu de formes  
+# Pour réduire le plus possible, choisir des images simples avec peu de formes  
 
 
 # Define function to scale the image down to 800x600
@@ -73,80 +72,76 @@ def coords2(img):
     path = "let drawing2 = ["
     for i in range(len(img)-1):
         path = f"{path}[{img[i][1]},{img[i][0]}], "
-    path = f"{path}[{img[i][1]},{img[i][0]}]] "
+    path = f"{path}[{img[len(img)-1][1]},{img[len(img)-1][0]}]]"
     return path
 
 
 
 # Define function which applies all of the above functions on an image to get the path  
-def create_path(img_path):
+def create_path():
     error = tk.Label(root, text="L'image n'a pas été trouvé")
     error.pack_forget()
 
-    # Show the Progressbar widget and start the animation
-    progress.pack()
-    progress.start()
-    try:
-        img = cv2.imread(img_path)
-        scaled = scale(img)
-        gray = grayscale(scaled)
-        # Apply Canny Edge Detection
-        edges = cv2.Canny(gray,100,200)
-        # Save the output image
-        cv2.imwrite('output.jpg', edges)
+    # Prompt the user to select an image file
+    file_path = filedialog.askopenfilename(filetypes=[("Image Files", "*.jpg;*.jpeg;*.png;*.gif")])
 
-        points = coords(edges)
-        path = nn_tsp(set(points))
-        path2 = coords2(path)
-        file = open("path.js", "w")
-        file.write(path2)
-
-        # Open a new image file
-        new_image = Image.open("output.jpg")
-        # Convert the PIL image to a Tkinter-compatible format
-        new_tk_image = ImageTk.PhotoImage(new_image)
-        # Update the Label widget with the new image
-        label.configure(image=new_tk_image)
-        # Keep a reference to the new image to avoid garbage collection
-        label.image = new_tk_image
-
-    except AttributeError: 
-        # Create a label to display a prompt
-        error = tk.Label(root, text="L'image n'a pas été trouvé")
-        error.pack()
-    # Hide the Progressbar widget and stop the animation
-    progress.stop()
-    progress.pack_forget()
+    # If the user selected a file, load and display the image
+    if file_path:
+        # Show the Progressbar widget and start the animation
+        progress.pack()
+        progress.start()
 
 
-# Define function which gets the path of the image
-def choose_image():
-    img_path = entry.get()
-    create_path(img_path)
+        try:
+            img = cv2.imread(file_path)
+            scaled = scale(img)
+            gray = grayscale(scaled)
+            # Apply Canny Edge Detection
+            edges = cv2.Canny(gray,100,200)
+            # Save the output image
+            cv2.imwrite('output.jpg', edges)
+
+            points = coords(edges)
+            path = nn_tsp(set(points))
+            path2 = coords2(path)
+            file = open("docs\path.js", "w")
+            file.write(path2)
+
+            # Open a new image file
+            new_image = Image.open("output.jpg")
+            # Convert the PIL image to a Tkinter-compatible format
+            new_tk_image = ImageTk.PhotoImage(new_image)
+            # Update the Label widget with the new image
+            label.configure(image=new_tk_image)
+            # Keep a reference to the new image to avoid garbage collection
+            label.image = new_tk_image
+
+        except AttributeError: 
+            # Create a label to display a prompt
+            error = tk.Label(root, text="L'image n'a pas été trouvé")
+            error.pack()
+        # Hide the Progressbar widget and stop the animation
+        progress.stop()
+        progress.pack_forget()
+
 
 
 # Define a function to run the long_running_function() in a separate thread
 def run_function_in_thread():
-    thread = threading.Thread(target=choose_image)
+    thread = threading.Thread(target=create_path)
     thread.start()
-
-
 
 # Create a Tkinter window
 root = tk.Tk()
 root.title("Image to path")
 
 # Create a label to display a prompt
-prompt = tk.Label(root, text="Entrez le nom de votre image :")
+prompt = tk.Label(root, text="Appuyez sur le bouton ci-dessous pour choisir une image :")
 prompt.pack()
-
-# Create an Entry widget to get user input
-entry = tk.Entry(root)
-entry.pack()
 
 
 # Create a button to trigger the input handling function
-button = tk.Button(root, text="Submit", command=run_function_in_thread)
+button = tk.Button(root, text="Choisir une Image", command=run_function_in_thread)
 button.pack()
 
 # Create a Progressbar widget and hide it initially
